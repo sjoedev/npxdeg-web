@@ -1,5 +1,6 @@
 // @ts-check
 import node from "@astrojs/node";
+import preact from "@astrojs/preact";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField } from "astro/config";
 
@@ -8,6 +9,7 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
+  integrations: [preact()],
   vite: {
     plugins: [tailwindcss()],
   },
@@ -15,7 +17,7 @@ export default defineConfig({
     schema: {
       BUNNY_DATABASE_URL: envField.string({ context: "server", access: "public" }),
       BUNNY_DATABASE_AUTH_TOKEN: envField.string({ context: "server", access: "secret" }),
-      BUNNY_STORAGE_BASE_URL: envField.string({ context: "server", access: "public" }),
+      BUNNY_STORAGE_BASE_URL: envField.string({ context: "client", access: "public" }),
     },
   },
 });

@@ -1,0 +1,83 @@
+---
+import PageHeading from "../../components/page-heading.astro";
+import PageLayout from "../../components/page-layout.astro";
+import PlantMetadata from "../../components/plant-metadata.astro";
+import { db } from "../../libs/bunny-db";
+import { storage } from "../../libs/bunny-storage";
+import { markdown } from "../../libs/markdown";
+import { PlantSchema } from "../../schema";
+
+const slug = Astro.params["slug"];
+if (!slug) {
+  return Astro.redirect("/404");
+}
+
+const res = await db.execute({
+  sql: `
+    SELECT
+      p.id,
+      p.common_name as commonName,
+      p.slug,
+      p.binomial,
+      p.image_id as imageId,
+      p.notes,
+      p.updated_at as updatedAt,
+      h.unit AS heightUnit,
+      h.min_val AS heightMin,
+      h.max_val AS heightMax,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'light') AS prefsLight,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'moisture') AS prefsMoisture,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'bloom_season') AS bloomSeasons,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'toxicity') AS toxicity
+    FROM plant p
+    LEFT JOIN height h ON h.id = p.height_id
+    LEFT JOIN plant_attr a ON a.plant_id = p.id
+    WHERE slug = ?
+    GROUP BY p.id
+  `,
+  args: [slug],
+});
+
+if (res.rows.length < 1) {
+  return Astro.redirect("/404");
+}
+
+const [row] = res.rows;
+const plant = PlantSchema.parse(row);
+---
+
+<PageLayout>
+  <div class="mx-auto max-w-2xl py-4">
+    <PageHeading class="mb-2">{plant.commonName}</PageHeading>
+    <div class="mb-6 text-neutral-700 italic">{plant.binomial}</div>
+
+    {
+      plant.imageId && (
+        <div class="mb-6 max-w-sm">
+          <img
+            src={storage.itemUrl(plant.imageId)}
+            alt={plant.commonName}
+          />
+        </div>
+      )
+    }
+
+    <PlantMetadata
+      heightUnit={plant.heightUnit}
+      heightMin={plant.heightMin}
+      heightMax={plant.heightMax}
+      prefsLight={plant.prefsLight}
+      prefsMoisture={plant.prefsMoisture}
+      toxicity={plant.toxicity}
+    />
+
+    {
+      plant.notes && (
+        <div
+          set:html={markdown.render(plant.notes)}
+          class="markdown mt-6"
+        />
+      )
+    }
+  </div>
+</PageLayout>

@@ -1,0 +1,73 @@
+---
+import HeightRange from "./height-range.astro";
+
+type Props = {
+  heightUnit?: string;
+  heightMin?: number;
+  heightMax?: number;
+  prefsLight: Array<string>;
+  prefsMoisture: Array<string>;
+  toxicity: Array<string>;
+};
+
+const { heightUnit, heightMin, heightMax, prefsLight, prefsMoisture, toxicity } = Astro.props;
+
+const any =
+  heightUnit ||
+  heightMin !== undefined ||
+  heightMax !== undefined ||
+  prefsLight.length > 0 ||
+  prefsMoisture.length > 0 ||
+  toxicity.length > 0;
+---
+
+{
+  any && (
+    <div class="flex flex-col gap-4 bg-neutral-200 p-4">
+      {heightUnit && heightMin && heightMax && (
+        <div>
+          <div class="font-bold">Typical Height</div>
+          <HeightRange
+            unit={heightUnit}
+            min={heightMin}
+            max={heightMax}
+          />
+        </div>
+      )}
+
+      {prefsLight.length > 0 && (
+        <div>
+          <div class="font-bold">Light Preference</div>
+          <ul class="ml-6 list-disc">
+            {prefsLight.map((pref) => (
+              <li>{pref}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {prefsMoisture.length > 0 && (
+        <div>
+          <div class="font-bold">Moisture Preference</div>
+          <ul class="ml-6 list-disc">
+            {prefsMoisture.map((pref) => (
+              <li>{pref}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {toxicity.length > 0 && (
+        <div>
+          <div class="font-bold">Toxic To</div>
+          <div class="text-xs text-neutral-700 italic">Caution: may be incomplete</div>
+          <ul class="ml-6 list-disc">
+            {toxicity.map((pref) => (
+              <li>{pref}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}

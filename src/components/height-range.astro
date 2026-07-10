@@ -1,0 +1,58 @@
+---
+type Props = {
+  unit?: string;
+  min?: number;
+  max?: number;
+};
+
+const { unit, min, max } = Astro.props;
+
+if (!unit) {
+  throw new Error("missing unit");
+}
+
+if (!min) {
+  throw new Error("missing min");
+}
+
+if (!max) {
+  throw new Error("missing min");
+}
+
+const symbol = (unit: string): string => {
+  if (unit === "feet") {
+    return "'";
+  }
+
+  if (unit === "inches") {
+    return '"';
+  }
+
+  throw new Error(`invalid unit: ${unit}`);
+};
+---
+
+{
+  min === max && (
+    <div>
+      {min}
+      {symbol(unit)}
+    </div>
+  )
+}
+
+{
+  min !== max && (
+    <div>
+      <span>
+        {min}
+        {symbol(unit)}
+      </span>
+      <span> to </span>
+      <span>
+        {max}
+        {symbol(unit)}
+      </span>
+    </div>
+  )
+}

@@ -1,49 +1,45 @@
 ---
-import { z } from "astro/zod";
-import Anchor from "../components/anchor.astro";
 import PageHeading from "../components/page-heading.astro";
 import PageLayout from "../components/page-layout.astro";
+import { PLANT_PAGE_SIZE } from "../constants";
+import { LoadPlants } from "../islands/load-plants";
 import { db } from "../libs/bunny-db";
+import { PlantCardSchema } from "../schema";
 
-const PlantSchema = z.object({
-  id: z.number(),
-  commonName: z.string(),
-  slug: z.string(),
-  binomial: z.string(),
-  imageId: z.string().optional(),
-  notes: z.string().optional(),
-  updatedAt: z.string(),
+const sql = `
+    SELECT
+      id,
+      common_name as commonName,
+      slug,
+      binomial,
+      image_id as imageId,
+      updated_at as updatedAt
+    FROM plant
+    WHERE id >= ?
+    LIMIT ?
+  `;
+
+const res = await db.execute({
+  sql,
+  args: [0, PLANT_PAGE_SIZE + 1],
 });
 
-const res = await db.execute(`
-  SELECT
-    id,
-    common_name as commonName,
-    slug,
-    binomial,
-    image_id as imageId,
-    notes,
-    updated_at as updatedAt
-  FROM
-    plant
-  WHERE
-    id = 1
-`);
+let more = res.rows.length > PLANT_PAGE_SIZE;
+let rows = res.rows;
+if (more) {
+  rows = rows.slice(0, PLANT_PAGE_SIZE);
+}
+
+const seed = rows.map((row) => PlantCardSchema.parse(row));
 ---
 
 <PageLayout>
-  <PageHeading>Plants</PageHeading>
-
-  <ul class="list-disc pl-8">
-    {
-      res.rows.map((row) => {
-        const plant = PlantSchema.parse(row);
-        return (
-          <li class="">
-            <Anchor href={`/plants/${plant.slug}`}>{plant.commonName}</Anchor>
-          </li>
-        );
-      })
-    }
-  </ul>
+  <div class="py-4">
+    <PageHeading class="mb-8">Plants</PageHeading>
+    <LoadPlants
+      client:load
+      seed={seed}
+      more={more}
+    />
+  </div>
 </PageLayout>

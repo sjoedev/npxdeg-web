@@ -1,10 +1,49 @@
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>npdex</title>
-  </head>
-  <body>
-    <h1>npdex</h1>
-  </body>
-</html>
+---
+import { z } from "astro/zod";
+import Anchor from "../components/anchor.astro";
+import PageHeading from "../components/page-heading.astro";
+import PageLayout from "../components/page-layout.astro";
+import { db } from "../libs/bunny-db";
+
+const PlantSchema = z.object({
+  id: z.number(),
+  commonName: z.string(),
+  slug: z.string(),
+  binomial: z.string(),
+  imageId: z.string().optional(),
+  notes: z.string().optional(),
+  updatedAt: z.string(),
+});
+
+const res = await db.execute(`
+  SELECT
+    id,
+    common_name as commonName,
+    slug,
+    binomial,
+    image_id as imageId,
+    notes,
+    updated_at as updatedAt
+  FROM
+    plant
+  WHERE
+    id = 1
+`);
+---
+
+<PageLayout>
+  <PageHeading>Plants</PageHeading>
+
+  <ul class="list-disc pl-8">
+    {
+      res.rows.map((row) => {
+        const plant = PlantSchema.parse(row);
+        return (
+          <li class="">
+            <Anchor href={`/plants/${plant.slug}`}>{plant.commonName}</Anchor>
+          </li>
+        );
+      })
+    }
+  </ul>
+</PageLayout>

@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@layer base {
+  *:focus-visible {
+    @apply outline-4 outline-offset-0 outline-blue-400 outline-solid;
+  }
+}
+
+@theme {
+  --font-sans: "Merriweather Sans", sans-serif;
+  --font-serif: "Merriweather", serif;
+}

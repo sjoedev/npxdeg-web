@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { twMerge } from "tailwind-merge";
+
+type Props = HTMLAttributes<"a">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<a
+  {...props}
+  class={twMerge("block w-fit underline", className)}
+>
+  <slot />
+</a>

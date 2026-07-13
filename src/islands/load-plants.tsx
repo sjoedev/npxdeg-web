@@ -61,7 +61,7 @@ export const LoadPlants = (props: Props) => {
 
             <div class="p-2 text-sm">
               <div class="font-bold">{p.commonName}</div>
-              <div class="mb-2 text-neutral-700 italic">{p.binomial}</div>
+              <div class="mb-2 text-neutral-700">{p.binomial}</div>
               <a
                 href={`/plants/${p.slug}`}
                 class="block w-fit underline"

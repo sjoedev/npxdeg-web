@@ -42,13 +42,12 @@ if (res.rows.length < 1) {
 
 const [row] = res.rows;
 const plant = PlantSchema.parse(row);
-console.log(plant);
 ---
 
 <PageLayout>
   <div class="mx-auto max-w-2xl py-4">
-    <PageHeading class="mb-2">{plant.commonName}</PageHeading>
-    <div class="mb-6 text-neutral-700 italic">{plant.binomial}</div>
+    <PageHeading class="mb-1">{plant.commonName}</PageHeading>
+    <div class="mb-6 text-neutral-700">{plant.binomial}</div>
 
     {
       plant.imageId && (

@@ -26,7 +26,7 @@ const any =
     <div class="flex flex-col gap-4 bg-neutral-200 p-4">
       {heightMin && heightMax && (
         <div>
-          <div class="font-bold">Typical Height</div>
+          <div class="mb-1 font-serif font-bold">Typical Height</div>
           <HeightRange
             min={heightMin}
             max={heightMax}
@@ -36,7 +36,7 @@ const any =
 
       {prefsLight.length > 0 && (
         <div>
-          <div class="font-bold">Light Preference</div>
+          <div class="mb-1 font-serif font-bold">Light Preference</div>
           <ul class="ml-6 list-disc">
             {prefsLight.map((pref) => (
               <li>{pref}</li>
@@ -47,7 +47,7 @@ const any =
 
       {prefsMoisture.length > 0 && (
         <div>
-          <div class="font-bold">Moisture Preference</div>
+          <div class="mb-1 font-serif font-bold">Moisture Preference</div>
           <ul class="ml-6 list-disc">
             {prefsMoisture.map((pref) => (
               <li>{pref}</li>
@@ -58,7 +58,7 @@ const any =
 
       {bloomSeasons.length > 0 && (
         <div>
-          <div class="font-bold">Bloom Season</div>
+          <div class="mb-1 font-serif font-bold">Bloom Season</div>
           <ul class="ml-6 list-disc">
             {bloomSeasons.map((pref) => (
               <li>{pref}</li>
@@ -69,8 +69,8 @@ const any =
 
       {toxicity.length > 0 && (
         <div>
-          <div class="font-bold">Toxic To</div>
-          <div class="text-xs text-neutral-700 italic">Caution: may be incomplete</div>
+          <div class="font-serif font-bold">Known Toxicity</div>
+          <div class="mb-1 text-xs text-neutral-700">Caution: may be incomplete</div>
           <ul class="ml-6 list-disc">
             {toxicity.map((pref) => (
               <li>{pref}</li>

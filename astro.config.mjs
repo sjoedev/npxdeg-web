@@ -16,7 +16,7 @@ export default defineConfig({
   env: {
     schema: {
       BUNNY_DATABASE_URL: envField.string({ context: "server", access: "public" }),
-      BUNNY_DATABASE_AUTH_TOKEN: envField.string({ context: "server", access: "secret" }),
+      BUNNY_DATABASE_READONLY_AUTH_TOKEN: envField.string({ context: "server", access: "secret" }),
       BUNNY_STORAGE_BASE_URL: envField.string({ context: "client", access: "public" }),
     },
   },

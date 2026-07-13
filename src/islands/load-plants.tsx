@@ -47,9 +47,9 @@ export const LoadPlants = (props: Props) => {
           >
             {p.imageId && (
               <img
-                src={storage.itemUrl(p.imageId)}
+                src={storage.plantImageUrl(p.imageId, "thumb")}
                 alt={p.commonName}
-                class="aspect-video object-cover select-none"
+                class="aspect-video w-full object-cover select-none"
               />
             )}
 

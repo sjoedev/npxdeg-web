@@ -1,5 +1,7 @@
 import { BUNNY_STORAGE_BASE_URL } from "astro:env/client";
 
+type ImageSize = "thumb" | "preview" | "main";
+
 export const storage = {
-  itemUrl: (path: string): string => `${BUNNY_STORAGE_BASE_URL}${path}`,
+  plantImageUrl: (id: string, size: ImageSize): string => `${BUNNY_STORAGE_BASE_URL}/${id}.${size}.webp`,
 };

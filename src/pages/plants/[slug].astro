@@ -20,17 +20,15 @@ const res = await db.execute({
       p.slug,
       p.binomial,
       p.image_id as imageId,
+      p.min_height_inches AS minHeightInches,
+      p.max_height_inches AS maxHeightInches,
+      p.height_display_feet AS heightDisplayFeet,
       p.notes,
-      p.updated_at as updatedAt,
-      h.unit AS heightUnit,
-      h.min_val AS heightMin,
-      h.max_val AS heightMax,
-      json_group_array(a.val) FILTER (WHERE a.kind = 'light') AS prefsLight,
-      json_group_array(a.val) FILTER (WHERE a.kind = 'moisture') AS prefsMoisture,
-      json_group_array(a.val) FILTER (WHERE a.kind = 'bloom_season') AS bloomSeasons,
-      json_group_array(a.val) FILTER (WHERE a.kind = 'toxicity') AS toxicity
+      json_group_array(a.val) FILTER (WHERE a.kind = 'Light') AS prefsLight,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'Moisture') AS prefsMoisture,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'Bloom Season') AS bloomSeasons,
+      json_group_array(a.val) FILTER (WHERE a.kind = 'Toxicity') AS toxicity
     FROM plant p
-    LEFT JOIN height h ON h.id = p.height_id
     LEFT JOIN plant_attr a ON a.plant_id = p.id
     WHERE slug = ?
     GROUP BY p.id
@@ -44,6 +42,7 @@ if (res.rows.length < 1) {
 
 const [row] = res.rows;
 const plant = PlantSchema.parse(row);
+console.log(plant);
 ---
 
 <PageLayout>
@@ -55,19 +54,20 @@ const plant = PlantSchema.parse(row);
       plant.imageId && (
         <div class="mb-6 max-w-sm">
           <img
-            src={storage.itemUrl(plant.imageId)}
+            src={storage.plantImageUrl(plant.imageId, "preview")}
             alt={plant.commonName}
+            class="w-full"
           />
         </div>
       )
     }
 
     <PlantMetadata
-      heightUnit={plant.heightUnit}
-      heightMin={plant.heightMin}
-      heightMax={plant.heightMax}
+      heightMin={plant.minHeightInches}
+      heightMax={plant.maxHeightInches}
       prefsLight={plant.prefsLight}
       prefsMoisture={plant.prefsMoisture}
+      bloomSeasons={plant.bloomSeasons}
       toxicity={plant.toxicity}
     />
 

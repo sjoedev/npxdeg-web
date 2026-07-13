@@ -20,4 +20,7 @@ export default defineConfig({
       BUNNY_STORAGE_BASE_URL: envField.string({ context: "client", access: "public" }),
     },
   },
+  devToolbar: {
+    enabled: false,
+  },
 });

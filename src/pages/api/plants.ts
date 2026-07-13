@@ -17,8 +17,7 @@ export const GET: APIRoute = async ({ url }) => {
       common_name as commonName,
       slug,
       binomial,
-      image_id as imageId,
-      updated_at as updatedAt
+      image_id as imageId
     FROM plant
     WHERE id > ?
     ORDER BY id ASC
@@ -37,7 +36,7 @@ export const GET: APIRoute = async ({ url }) => {
   }
 
   const plants = rows.map((row) => PlantSchema.parse(row));
-
+  console.log(plants);
   return new Response(
     JSON.stringify({
       plants,

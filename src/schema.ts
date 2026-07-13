@@ -27,16 +27,15 @@ const jsonStringArray = z
   .pipe(z.array(z.string()));
 
 export const PlantSchema = z.object({
-  id: z.number().int(),
+  id: z.int(),
   commonName: z.string(),
   slug: z.string(),
-  binomial: z.string(),
+  binomial: z.string().trim(),
   imageId: z.string().nullish().transform(normalize),
+  minHeightInches: z.number().int().nullish().transform(normalize),
+  maxHeightInches: z.number().int().nullish().transform(normalize),
+  heightDisplayFeet: z.preprocess((x) => x !== 0, z.boolean()),
   notes: z.string().nullish().transform(normalize),
-  updatedAt: z.string(),
-  heightUnit: z.string().nullish().transform(normalize),
-  heightMin: z.number().int().nullish().transform(normalize),
-  heightMax: z.number().int().nullish().transform(normalize),
   prefsLight: jsonStringArray,
   prefsMoisture: jsonStringArray,
   bloomSeasons: jsonStringArray,

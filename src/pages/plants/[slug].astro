@@ -7,6 +7,8 @@ import { storage } from "../../libs/bunny-storage";
 import { markdown } from "../../libs/markdown";
 import { PlantSchema } from "../../schema";
 
+Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=300, stale-while-revalidate=300");
+
 const slug = Astro.params["slug"];
 if (!slug) {
   return Astro.redirect("/404");

@@ -6,8 +6,6 @@ import { LoadPlants } from "../islands/load-plants";
 import { db } from "../libs/bunny-db";
 import { PlantCardSchema } from "../schema";
 
-Astro.response.headers.set("Cache-Control", "public, max-age=0, s-maxage=300, stale-while-revalidate=300");
-
 const sql = `
     SELECT
       id,
